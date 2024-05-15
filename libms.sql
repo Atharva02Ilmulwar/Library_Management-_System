@@ -64,8 +64,8 @@ INSERT INTO Dates (date_value)
 SELECT '2023-01-01'::DATE + (n || ' day')::INTERVAL
 FROM generate_series(0, 149) AS s(n);
 
--- Display Dates from 1st Jan to 30th May 2023
+-- Display Dates from 1st Jan to 30th May 2024
 
 SELECT *
 FROM Dates
-WHERE date_value BETWEEN '2023-01-01' AND '2023-05-30';
+WHERE date_value BETWEEN '2023-01-01' AND '2024-05-30';
