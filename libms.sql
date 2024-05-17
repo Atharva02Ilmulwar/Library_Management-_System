@@ -1,11 +1,7 @@
--- Create Authors table
-
 CREATE TABLE Authors (
     author_id SERIAL PRIMARY KEY,
     author_name VARCHAR(100)
 );
-
--- Insert sample data into Authors table
 
 INSERT INTO Authors (author_id, author_name)
 VALUES
@@ -15,8 +11,6 @@ VALUES
     (4, 'Harper Lee'),
     (5, 'J.R.R. Tolkien');
 
--- Create Books table
-
 CREATE TABLE Books (
     book_id SERIAL PRIMARY KEY,
     title VARCHAR(200),
@@ -25,8 +19,6 @@ CREATE TABLE Books (
     publication_year INT,
     FOREIGN KEY (author_id) REFERENCES Authors(author_id)
 );
-
--- Insert sample data into Books table
 
 INSERT INTO Books (title, author_id, genre, publication_year)
 VALUES
@@ -51,20 +43,15 @@ VALUES
     ('Go Set a Watchman: A Novel', 4, 'Fiction', 2015),
     ('The Children of Húrin', 5, 'Fantasy', 2007);
 
--- Create a Date Table
-
 CREATE TABLE Dates (
     date_id SERIAL PRIMARY KEY,
     date_value DATE
 );
 
--- Insert sample data into Dates table
-
 INSERT INTO Dates (date_value)
 SELECT '2023-01-01'::DATE + (n || ' day')::INTERVAL
 FROM generate_series(0, 149) AS s(n);
 
--- Display Dates from 1st Jan to 30th May 2024
 
 SELECT *
 FROM Dates
