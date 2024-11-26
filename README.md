@@ -1,11 +1,19 @@
-# Library_Management-_System
-## Library Database Schema
+# Library_Management_System  
 
-This repository contains SQL code for setting up a basic library database schema. The schema includes three tables:
+## Library Database Schema  
+This repository contains SQL code for setting up a basic library database schema. The schema includes three tables:  
 
-* **Authors:** Stores information about authors, including their ID and name.
-* **Books:** Stores information about books, including their ID, title, author ID, genre, and publication year. The author ID references the Authors table using a foreign key relationship.
-* **Dates:** Stores a range of dates for potential future use (e.g., for loan due dates).
+1. **Authors**:  
+   - Stores information about authors, including their ID and name.  
+
+2. **Books**:  
+   - Stores information about books, including their ID, title, author ID, genre, and publication year.  
+   - The author ID references the **Authors** table using a foreign key relationship.  
+
+3. **Dates**:  
+   - Stores a range of dates for potential future use (e.g., for loan due dates).  
+
+---
 
 ## Usage
 
