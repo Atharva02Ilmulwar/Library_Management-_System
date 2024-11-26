@@ -1,58 +1,86 @@
-CREATE TABLE Authors (
-    author_id SERIAL PRIMARY KEY,
-    author_name VARCHAR(100)
-);
+Database Creation
 
-INSERT INTO Authors (author_id, author_name)
-VALUES
-    (1, 'Stephen King'),
-    (2, 'J.K. Rowling'),
-    (3, 'George Orwell'),
-    (4, 'Harper Lee'),
-    (5, 'J.R.R. Tolkien');
 
+CREATE DATABASE LibraryManagement;
+USE LibraryManagement;
+Table Creation
+
+
+-- Table for Books
+    
 CREATE TABLE Books (
-    book_id SERIAL PRIMARY KEY,
-    title VARCHAR(200),
-    author_id INT,
-    genre VARCHAR(100),
-    publication_year INT,
-    FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+    BookID INT AUTO_INCREMENT PRIMARY KEY,
+    Title VARCHAR(255) NOT NULL,
+    Author VARCHAR(255) NOT NULL,
+    Genre VARCHAR(100),
+    PublishedYear INT,
+    Quantity INT DEFAULT 1
 );
 
-INSERT INTO Books (title, author_id, genre, publication_year)
-VALUES
-    ('The Shining', 1, 'Horror', 1977),
-    ('Harry Potter and the Philosopher''s Stone', 2, 'Fantasy', 1997),
-    ('1984', 3, 'Dystopian', 1949),
-    ('To Kill a Mockingbird', 4, 'Fiction', 1960),
-    ('The Hobbit', 5, 'Fantasy', 1937),
-    ('Pet Sematary', 1, 'Horror', 1983),
-    ('Harry Potter and the Chamber of Secrets', 2, 'Fantasy', 1998),
-    ('Animal Farm', 3, 'Dystopian', 1945),
-    ('Go Set a Watchman', 4, 'Fiction', 2015),
-    ('The Lord of the Rings', 5, 'Fantasy', 1954),
-    ('It', 1, 'Horror', 1986),
-    ('Harry Potter and the Prisoner of Azkaban', 2, 'Fantasy', 1999),
-    ('Nineteen Eighty-Four', 3, 'Dystopian', 1949),
-    ('To Kill a Mockingbird: A Graphic Novel', 4, 'Fiction', 2018),
-    ('The Silmarillion', 5, 'Fantasy', 1977),
-    ('The Stand', 1, 'Horror', 1978),
-    ('Harry Potter and the Goblet of Fire', 2, 'Fantasy', 2000),
-    ('Animal Farm: A Fairy Story', 3, 'Dystopian', 1945),
-    ('Go Set a Watchman: A Novel', 4, 'Fiction', 2015),
-    ('The Children of Húrin', 5, 'Fantasy', 2007);
+-- Table for Members
 
-CREATE TABLE Dates (
-    date_id SERIAL PRIMARY KEY,
-    date_value DATE
+CREATE TABLE Members (
+    MemberID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) UNIQUE,
+    PhoneNumber VARCHAR(15),
+    MembershipDate DATE DEFAULT CURRENT_DATE
 );
 
-INSERT INTO Dates (date_value)
-SELECT '2023-01-01'::DATE + (n || ' day')::INTERVAL
-FROM generate_series(0, 149) AS s(n);
+-- Table for Issued Books
 
+CREATE TABLE IssuedBooks (
+    IssueID INT AUTO_INCREMENT PRIMARY KEY,
+    BookID INT,
+    MemberID INT,
+    IssueDate DATE DEFAULT CURRENT_DATE,
+    ReturnDate DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
 
-SELECT *
-FROM Dates
-WHERE date_value BETWEEN '2023-01-01' AND '2024-05-30';
+Sample Data Insertion
+
+-- Insert data into Books
+INSERT INTO Books (Title, Author, Genre, PublishedYear, Quantity)
+VALUES 
+('The Great Gatsby', 'F. Scott Fitzgerald', 'Fiction', 1925, 5),
+('1984', 'George Orwell', 'Dystopian', 1949, 3),
+('To Kill a Mockingbird', 'Harper Lee', 'Fiction', 1960, 4);
+
+-- Insert data into Members
+
+INSERT INTO Members (Name, Email, PhoneNumber)
+VALUES 
+('John Doe', 'johndoe@example.com', '1234567890'),
+('Jane Smith', 'janesmith@example.com', '0987654321');
+
+-- Insert data into IssuedBooks
+
+INSERT INTO IssuedBooks (BookID, MemberID, ReturnDate)
+VALUES 
+(1, 1, '2024-12-01'),
+(2, 2, '2024-12-05');
+
+Query Examples
+List all books available in the library
+
+SELECT * FROM Books;
+
+Find all members who have borrowed books
+
+SELECT Members.Name, Books.Title, IssuedBooks.IssueDate, IssuedBooks.ReturnDate
+FROM IssuedBooks
+JOIN Members ON IssuedBooks.MemberID = Members.MemberID
+JOIN Books ON IssuedBooks.BookID = Books.BookID;
+
+Check book availability
+
+SELECT Title, Quantity FROM Books WHERE Quantity > 0;
+Update book quantity after issue
+
+UPDATE Books SET Quantity = Quantity - 1 WHERE BookID = 1;
+Return a book
+
+UPDATE Books SET Quantity = Quantity + 1 WHERE BookID = 1;
+DELETE FROM IssuedBooks WHERE IssueID = 1;
